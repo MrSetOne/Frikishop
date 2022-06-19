@@ -5,6 +5,7 @@ const port = 8080;
 
 
 app.use(express.json());
+app.use(express.static("./uploads"))
 
 app.use('/users', require('./routes/users'));
 app.use('/sets', require('./routes/sets'));
