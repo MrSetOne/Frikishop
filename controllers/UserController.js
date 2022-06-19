@@ -142,6 +142,16 @@ const UserController = {
         } catch (error) {
             res.status(404).send(`Enlace no valido`)
         }
+    },
+    async getById(req, res) {
+        try {
+            res.send(
+                await User.findByPk(req.params.id, { attributes: ["id", "username", "email", "adress"] })
+            )
+        } catch (error) {
+            console.error(error)
+            res.status(500).send({ message: 'Ha habido un problema ' })
+        }
     }
 }
 
