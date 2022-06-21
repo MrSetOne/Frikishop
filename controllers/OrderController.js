@@ -6,8 +6,10 @@ const OrderController = {
         try {
             req.body.paid = false
             const order = await Order.create({...req.body, UserId: req.user.id })
-            req.body.forEach(async element => {
-                await ProductOrders.create({...element, OrderId: order.id })
+            console.log(req.body)
+            req.body.productIds.forEach(async element => {
+                console.log(element.id)
+                await ProductOrders.create({ ProductId: element.id, OrderId: order.id })
             });
             res.status(201).send('Se ha creado el pedido correctamente')
         } catch (error) {

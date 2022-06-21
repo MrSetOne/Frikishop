@@ -145,9 +145,9 @@ const UserController = {
     },
     async getById(req, res) {
         try {
-            res.send(
-                await User.findByPk(req.params.id, { attributes: ["id", "username", "email", "adress"] })
-            )
+            const user = await User.findByPk(req.user.id)
+            res.send(user)
+
         } catch (error) {
             console.error(error)
             res.status(500).send({ message: 'Ha habido un problema ' })
