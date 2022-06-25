@@ -9,7 +9,7 @@ const OrderController = {
             console.log(req.body)
             req.body.productIds.forEach(async element => {
                 console.log(element.id)
-                await ProductOrders.create({ ProductId: element.id, OrderId: order.id })
+                await ProductOrders.create({ ProductId: element.id, OrderId: order.id, amount: element.amount })
             });
             res.status(201).send('Se ha creado el pedido correctamente')
         } catch (error) {

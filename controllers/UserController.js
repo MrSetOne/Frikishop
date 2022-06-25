@@ -145,6 +145,7 @@ const UserController = {
     },
     async getById(req, res) {
         try {
+            console.log("entra en backEnd")
             const user = await User.findByPk(req.user.id)
             res.send(user)
 
