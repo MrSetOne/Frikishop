@@ -9,18 +9,18 @@ const UserController = {
     async create(req, res, next) {
         try {
             req.body.role = "user"
-            req.body.confirmed = false
+            req.body.confirmed = true
             const hashedPassword = await bcrypt.hashSync(req.body.password, 10)
             const user = await User.create({...req.body, password: hashedPassword });
-            const emailToken = await jwt.sign({ email: req.body.email }, jwt_secret, { expiresIn: '48h' })
-            const url = "http://localhost:8080/users/confirm/" + emailToken
-            await transporter.sendMail({
-                to: req.body.email,
-                subject: "Confirma tu registro",
-                html: `<h2>¡Hola ${user.username}!</h2>
-                <p>Para finalizar registro <a href=${url}>haz click aquí</a> UwU</p>
-                `
-            })
+            // const emailToken = await jwt.sign({ email: req.body.email }, jwt_secret, { expiresIn: '48h' })
+            // const url = "http://localhost:8080/users/confirm/" + emailToken
+            // await transporter.sendMail({
+            //     to: req.body.email,
+            //     subject: "Confirma tu registro",
+            //     html: `<h2>¡Hola ${user.username}!</h2>
+            //     <p>Para finalizar registro <a href=${url}>haz click aquí</a> UwU</p>
+            //     `
+            // })
             res.status(201).send({ message: 'Se ha creado un usuario', user })
         } catch (error) {
             error.origin = "User";
@@ -43,7 +43,8 @@ const UserController = {
             const user = await User.findOne({
                 where: {
                     email: req.body.email
-                }
+                },
+                include: [{ model: Order, include: [{ model: Product, through: { attributes: ["amount"] } }] }]
             })
             if (!user) {
                 res.send('Email/contraseña incorrectos')
@@ -67,7 +68,7 @@ const UserController = {
             const user = await User.update({...req.body }, {
                 where: {
                     id: req.user.id
-                }
+                },
             })
             const userUpdated = await User.findByPk(req.user.id)
             res.send({ message: `Usuario con id ${req.user.id} actualizado con éxito`, userUpdated });
