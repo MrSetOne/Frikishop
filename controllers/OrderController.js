@@ -11,7 +11,7 @@ const OrderController = {
                 console.log(element.id)
                 await ProductOrders.create({ ProductId: element.id, OrderId: order.id, amount: element.amount })
             });
-            res.status(201).send('Se ha creado el pedido correctamente')
+            res.status(201).send({ message: 'Se ha creado el pedido correctamente', order })
         } catch (error) {
             console.error(error);
             res.send('Algo ha salido mal...')
@@ -45,6 +45,22 @@ const OrderController = {
             res.status(500).send({ message: 'Ha habido un problema ' })
         }
     },
+    async makeAPaid(req, res) {
+        try {
+            await Order.update({ paid: true }, {
+                where: {
+                    id: req.params.id
+                }
+            })
+            res.send({
+                message: `The order ${req.params.id} has been paid`,
+                id: req.params.id
+            })
+        } catch (error) {
+            console.error(error)
+            res.status(500).send({ message: 'Ha habido un problema' })
+        }
+    }
 }
 
 module.exports = OrderController
