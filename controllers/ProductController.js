@@ -5,7 +5,7 @@ const { Op } = Sequelize;
 const ProductController = {
     async create(req, res) {
         try {
-            const newProduct = await Product.create({ ...req.body, img: req.file.filename })
+            const newProduct = await Product.create({...req.body, img: req.file.filename })
             res.status(201).send({ message: 'Se ha añadido el producto correctamente', newProduct })
         } catch (error) {
             console.error(error);
@@ -25,7 +25,7 @@ const ProductController = {
     },
     async update(req, res) {
         try {
-            await Product.update({ ...req.body, img: req.file.filename }, {
+            await Product.update({...req.body, img: req.file.filename }, {
                 where: {
                     id: req.params.id
                 }
@@ -69,6 +69,7 @@ const ProductController = {
     },
     async getOneByName(req, res) {
         try {
+            console.log("try")
             res.send(await Product.findAll({
                 where: {
                     name: {
