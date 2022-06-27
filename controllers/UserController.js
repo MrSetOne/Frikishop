@@ -146,7 +146,7 @@ const UserController = {
     async getById(req, res) {
         try {
             console.log("entra en backEnd")
-            const user = await User.findByPk(req.user.id)
+            const user = await User.findByPk(req.user.id, { include: [{ model: Order, include: [{ model: Product, through: { attributes: ["amount"] } }] }] })
             res.send(user)
 
         } catch (error) {
